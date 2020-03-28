@@ -5,22 +5,18 @@ import com.pankx.dao.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.List;
 
 @Service
-public class TestService {
+public class UserService {
     @Autowired
     private UserMapper userMapper;
 
     /**
-     * 测试查询
+     * 查询所有信息
      * @return
      */
-    public List<User> getUser(){
-        System.out.println("Service 的getuser");
+    public List<User> getUsers(){
         return userMapper.selectByExampleWithUtype(null);
-
     }
-
 }

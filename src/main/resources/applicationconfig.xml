@@ -31,6 +31,12 @@
     <!--Spring整合Mybatis-->
 <!--    配置sqlSession工厂-->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!--配置分页-->
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageInterceptor"/>
+            </array>
+        </property>
 <!--        配置数据源-->
         <property name="dataSource" ref="dataSource"/>
         <property name="mapperLocations" value="classpath:mappers/*.xml"/>
@@ -51,6 +57,8 @@
     <aop:config>
         <aop:advisor advice-ref="transactionInterceptor" pointcut="execution(* com.pankx.service.*.*(..))"/>
     </aop:config>
+
+
 
 <!--    配置扫描器，将mybatis的接口实现加入到ioc容器-->
     <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">

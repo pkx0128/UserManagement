@@ -1,5 +1,7 @@
 package com.pankx.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.pankx.bean.User;
 import com.pankx.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,11 @@ public class TestController {
 
     @RequestMapping("/getusers")
     public String getusers(Model model){
+        PageHelper.startPage(1,5);
         List<User> list = testService.getUser();
-        model.addAttribute("users",list);
+        PageInfo pageInfo = new PageInfo(list,5);
+        model.addAttribute("users",pageInfo);
+        System.out.println(list);
         return "testsuccess";
     }
 }
