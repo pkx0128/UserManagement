@@ -34,7 +34,13 @@
         <!--配置分页-->
         <property name="plugins">
             <array>
-                <bean class="com.github.pagehelper.PageInterceptor"/>
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <value>
+                            reasonable = true
+                        </value>
+                    </property>
+                </bean>
             </array>
         </property>
 <!--        配置数据源-->
