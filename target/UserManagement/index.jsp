@@ -18,6 +18,59 @@
 
 </head>
 <body>
+<%--编辑模态框--%>
+<div class="modal fade" tabindex="-1" role="dialog" id="edit_user_model">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">修改用户信息</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="edit_user_form">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2 control-label">用户名：</label>
+                        <div class="col-sm-8" id="edit_username_div">
+                            <input type="text" class="form-control" id="edit_username"  name="userName" placeholder="请输入用户名"/>
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">姓别：</label>
+                        <div class="col-sm-10">
+                            <label class="radio-inline">
+                                <input type="radio" name="gender" value="M" checked> 男
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="gender" value="F"> 女
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="col-sm-2 control-label">email：</label>
+                        <div class="col-sm-8" id="edit_email_div">
+                            <input type="text" class="form-control" id="edit_email"  name="email" placeholder="请输入email"/>
+                            <span class="help-block"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="utId_select">用户类型</label>
+                        <div class="col-sm-4">
+                            <select id="edit_utId_select" name="utId" class="form-control"><!--此处放置用户类型option--></select>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="edit_save_user">更新</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <%--新增模态框--%>
     <div class="modal fade" tabindex="-1" role="dialog" id="add_user_model">
         <div class="modal-dialog" role="document">
@@ -150,9 +203,9 @@
                 //用户类型单元格
                 var uTypeTd = $("<td></td>").append(item.uType.utypeName);
                 //编辑按钮
-                var edit_btn = $("<button></button>").addClass("btn btn-primary btn-sm").append("<span></span>").addClass("glyphicon glyphicon-pencil").append("编辑");
+                var edit_btn = $("<button></button>").attr("id","edit_btn").addClass("btn btn-primary btn-sm").append("<span></span>").addClass("glyphicon glyphicon-pencil").append("编辑");
                 //删除按钮
-                var del_btn = $("<button></button>").addClass("btn btn-danger btn-sm").append("<span></span>").addClass("glyphicon glyphicon-trash").append("删除");
+                var del_btn = $("<button></button>").attr("id","del_btn").addClass("btn btn-danger btn-sm").append("<span></span>").addClass("glyphicon glyphicon-trash").append("删除");
                 var btnTd = $("<td></td>").append(edit_btn).append(" ").append(del_btn);
                 $("<tr></tr>").append(useridTd).append(userNameTd).append(genderTd).append(emailTd).append(uTypeTd).append(btnTd).appendTo($("#user_table tbody"));
             });
@@ -229,7 +282,9 @@
             }
             nav.append(ul).appendTo("#page_nav");
         }
-        //点击新增按钮弹出
+        /**
+         * 点击新增按钮弹出
+         */
         $("#add_user_btn").click(function(){
             //重置表单
             $("#add_user_form")[0].reset();
@@ -238,19 +293,23 @@
             remove_class("#email");
             console.log("新增按钮被点");
             //获取用户类型
-            get_usertype();
+            get_usertype("#utId_select");
             $("#add_user_model").modal({
                 backdrop:"static"
             });
         });
-        //消除表单中的校验状态信息
+        /**
+         * 消除表单中的校验状态信息
+         */
         function remove_class(ele){
             $(ele).parent().removeClass("has-success").removeClass("has-error");
             $(ele).next("span").empty();
         }
-        //发送ajax获取用户类型信息
-        function get_usertype(){
-            $("#utId_select").empty();
+        /**
+         * 发送ajax获取用户类型信息
+         */
+        function get_usertype(ele){
+            $(ele).empty();
             $.ajax({
                 url:"${APP_PATH}/utype",
                 type:"GET",
@@ -259,7 +318,7 @@
                     $.each(data.reldata.utype,function(index,item){
                         console.log(item.utypeName);
                         var typeOption = $("<option></option>").attr("value",item.utypeId).append(item.utypeName);
-                        typeOption.appendTo("#utId_select");
+                        typeOption.appendTo(ele);
                     });
                 }
             });
@@ -287,7 +346,7 @@
                     // console.log("saveuser===",rdata);
                     if(rdata.code == 100){
                         $('#add_user_model').modal('hide');
-                        //跳到最后一页
+                        // 跳到最后一页$("#page_msg").attr("pages_total")为构建分页时添加的自定义属性用于保存分页的总页数
                         get_emps($("#page_msg").attr("pages_total") + 1);
                     }
                 }
@@ -363,6 +422,18 @@
                 $(ele).next("span").append(msg);
             }
         }
+
+        /**
+         * 给编辑按钮添加单击事件
+         */
+        $(document).on("click","#edit_btn",function(){
+            get_usertype("#edit_utId_select");
+            $("#edit_user_model").modal({
+                backdrop:"static"
+            });
+
+        });
+
 
     </script>
 
