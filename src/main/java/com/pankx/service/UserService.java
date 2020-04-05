@@ -62,4 +62,8 @@ public class UserService {
     public User getuserbyid(Integer id){
         return userMapper.selectByPrimaryKey(id);
     }
+
+    public int updateuser(User user){
+        return userMapper.updateByPrimaryKeySelective(user);
+    }
 }

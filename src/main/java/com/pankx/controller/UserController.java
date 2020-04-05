@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @Controller
 public class UserController {
@@ -90,6 +89,12 @@ public class UserController {
     public Msg getuserbyid(@PathVariable Integer id){
         User user = userService.getuserbyid(id);
        return Msg.success().add("user",user);
+    }
+    @RequestMapping(value = "/user/{userId}",method = PUT)
+    @ResponseBody
+    public Msg updateuser(User user){
+        userService.updateuser(user);
+        return Msg.success();
     }
 
 }

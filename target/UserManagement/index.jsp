@@ -219,7 +219,7 @@
             //清空幸元素
             $("#page_msg").empty();
             var pageInfo = data.reldata.pageinfo;
-            $("#page_msg").attr("pages_total",pageInfo.pages).append("当前第"+pageInfo.pageNum+"页，总"+pageInfo.pages+"页，总"+pageInfo.total+"记录")
+            $("#page_msg").attr("pages_total",pageInfo.pages).attr("curr_page",pageInfo.pageNum).append("当前第"+pageInfo.pageNum+"页，总"+pageInfo.pages+"页，总"+pageInfo.total+"记录")
         }
 
         //构建分布条
@@ -461,6 +461,18 @@
             });
         }
 
+        $("#edit_save_user").click(function(){
+            console.log("提交数据");
+            $.ajax({
+                url:"${APP_PATH}/user/" + $("#edit_save_user").attr("edit_userId"),
+                type:"PUT",
+                data:$("#edit_user_form").serialize(),
+                success: function(data){
+                    $("#edit_user_model").modal("hide");
+                    get_emps($("#page_msg").attr("curr_page"));
+                }
+            });
+        });
 
     </script>
 
