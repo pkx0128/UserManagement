@@ -80,4 +80,16 @@ public class UserController {
         }
     }
 
+    /**
+     * 根据id查询用户信息
+     * @param id
+     * @return
+     */
+    @RequestMapping("/getuser/{id}")
+    @ResponseBody
+    public Msg getuserbyid(@PathVariable Integer id){
+        User user = userService.getuserbyid(id);
+       return Msg.success().add("user",user);
+    }
+
 }

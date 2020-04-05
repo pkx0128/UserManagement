@@ -31,8 +31,12 @@
                     <div class="form-group">
                         <label for="username" class="col-sm-2 control-label">用户名：</label>
                         <div class="col-sm-8" id="edit_username_div">
-                            <input type="text" class="form-control" id="edit_username"  name="userName" placeholder="请输入用户名"/>
-                            <span class="help-block"></span>
+<%--                            <input type="text" class="form-control" id="edit_username"  name="userName" placeholder="请输入用户名"/>--%>
+<%--                                <span class="help-block"></span>--%>
+                            <div class="col-sm-10">
+                                <p class="form-control-static"></p>
+                            </div>
+
                         </div>
                     </div>
                     <div class="form-group">
@@ -203,9 +207,9 @@
                 //用户类型单元格
                 var uTypeTd = $("<td></td>").append(item.uType.utypeName);
                 //编辑按钮
-                var edit_btn = $("<button></button>").attr("id","edit_btn").addClass("btn btn-primary btn-sm").append("<span></span>").addClass("glyphicon glyphicon-pencil").append("编辑");
+                var edit_btn = $("<button></button>").attr("id","edit_btn").attr("edit_id",item.userId).addClass("btn btn-primary btn-sm").append("<span></span>").addClass("glyphicon glyphicon-pencil").append("编辑");
                 //删除按钮
-                var del_btn = $("<button></button>").attr("id","del_btn").addClass("btn btn-danger btn-sm").append("<span></span>").addClass("glyphicon glyphicon-trash").append("删除");
+                var del_btn = $("<button></button>").attr("id","del_btn").attr("del_id",item.userId).addClass("btn btn-danger btn-sm").append("<span></span>").addClass("glyphicon glyphicon-trash").append("删除");
                 var btnTd = $("<td></td>").append(edit_btn).append(" ").append(del_btn);
                 $("<tr></tr>").append(useridTd).append(userNameTd).append(genderTd).append(emailTd).append(uTypeTd).append(btnTd).appendTo($("#user_table tbody"));
             });
@@ -427,6 +431,10 @@
          * 给编辑按钮添加单击事件
          */
         $(document).on("click","#edit_btn",function(){
+            $("#edit_user_form")[0].reset();
+            $(".form-control-static").empty();
+            //获取用户数据
+            get_edit_user($(this).attr("edit_id"))
             //获取用户类型数据
             get_usertype("#edit_utId_select");
             $("#edit_user_model").modal({
@@ -434,6 +442,24 @@
             });
 
         });
+
+        /**
+         * 根据id获取用户信息回显到编辑模态框
+         */
+        function get_edit_user(id){
+            $.ajax({
+                url:"${APP_PATH}/getuser/"+id,
+                type:"GET",
+                success:function(data){
+                    var user = data.reldata.user;
+                    $("#edit_save_user").attr("edit_userId",user.userId);
+                    $(".form-control-static").append(user.userName);
+                    $("#edit_user_form input[name=gender]").val([user.gender]);
+                    $("#edit_email").val(user.email);
+                    $("#edit_utId_select").val([user.utId]);
+                }
+            });
+        }
 
 
     </script>

@@ -33,6 +33,11 @@ public class UserService {
         return uTypeMapper.selectByExample(null);
     }
 
+    /**
+     * 根据名字查询数据判断用户名是否重名
+     * @param userName
+     * @return
+     */
     public Boolean getUserByName(String userName){
         UserExample userExample = new UserExample();
         userExample.createCriteria().andUserNameEqualTo(userName);
@@ -47,5 +52,14 @@ public class UserService {
      */
     public int saveuser(User user){
         return userMapper.insertSelective(user);
+    }
+
+    /**
+     * 根据id查询用户信息
+     * @param id
+     * @return
+     */
+    public User getuserbyid(Integer id){
+        return userMapper.selectByPrimaryKey(id);
     }
 }
