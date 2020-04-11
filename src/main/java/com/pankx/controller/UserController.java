@@ -90,6 +90,12 @@ public class UserController {
         User user = userService.getuserbyid(id);
        return Msg.success().add("user",user);
     }
+
+    /**
+     * 根据ID更新用户信息
+     * @param user
+     * @return
+     */
     @RequestMapping(value = "/user/{userId}",method = PUT)
     @ResponseBody
     public Msg updateuser(User user){

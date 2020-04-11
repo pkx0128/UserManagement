@@ -431,12 +431,15 @@
          * 给编辑按钮添加单击事件
          */
         $(document).on("click","#edit_btn",function(){
+            //重置表单
             $("#edit_user_form")[0].reset();
+            //清空显示用户名的元素数据
             $(".form-control-static").empty();
             //获取用户数据
             get_edit_user($(this).attr("edit_id"))
             //获取用户类型数据
             get_usertype("#edit_utId_select");
+            //弹出模态框
             $("#edit_user_model").modal({
                 backdrop:"static"
             });

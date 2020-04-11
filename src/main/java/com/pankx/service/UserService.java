@@ -63,6 +63,11 @@ public class UserService {
         return userMapper.selectByPrimaryKey(id);
     }
 
+    /**
+     * 更新用户信息
+     * @param user
+     * @return
+     */
     public int updateuser(User user){
         return userMapper.updateByPrimaryKeySelective(user);
     }
