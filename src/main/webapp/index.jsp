@@ -464,6 +464,9 @@
             });
         }
 
+        /**
+         * 提交数据到服务器处理
+         */
         $("#edit_save_user").click(function(){
             console.log("提交数据");
             $.ajax({
@@ -471,10 +474,28 @@
                 type:"PUT",
                 data:$("#edit_user_form").serialize(),
                 success: function(data){
+                    //关闭模态框
                     $("#edit_user_model").modal("hide");
+                    //返回当前页
                     get_emps($("#page_msg").attr("curr_page"));
                 }
             });
+        });
+
+
+        //给删除按钮添加事件
+        $(document).on("click","#del_btn",function(){
+             //如果用户点击了确定就发送请求删除用户信息
+            if(confirm("确定要删除此用户吗")){
+                $.ajax({
+                    url:"${APP_PATH}/user/" + $(this).attr("del_id"),
+                    type: "DELETE",
+                    success:function(data){
+                        //如果删除成功返回当前页面
+                        get_emps($("#page_msg").attr("curr_page"));
+                    }
+                });
+            }
         });
 
     </script>

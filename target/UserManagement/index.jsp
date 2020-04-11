@@ -431,12 +431,15 @@
          * 给编辑按钮添加单击事件
          */
         $(document).on("click","#edit_btn",function(){
+            //重置表单
             $("#edit_user_form")[0].reset();
+            //清空显示用户名的元素数据
             $(".form-control-static").empty();
             //获取用户数据
             get_edit_user($(this).attr("edit_id"))
             //获取用户类型数据
             get_usertype("#edit_utId_select");
+            //弹出模态框
             $("#edit_user_model").modal({
                 backdrop:"static"
             });
@@ -461,6 +464,9 @@
             });
         }
 
+        /**
+         * 提交数据到服务器处理
+         */
         $("#edit_save_user").click(function(){
             console.log("提交数据");
             $.ajax({
@@ -468,10 +474,28 @@
                 type:"PUT",
                 data:$("#edit_user_form").serialize(),
                 success: function(data){
+                    //关闭模态框
                     $("#edit_user_model").modal("hide");
+                    //返回当前页
                     get_emps($("#page_msg").attr("curr_page"));
                 }
             });
+        });
+
+
+        //给删除按钮添加事件
+        $(document).on("click","#del_btn",function(){
+             //如果用户点击了确定就发送请求删除用户信息
+            if(confirm("确定要删除此用户吗")){
+                $.ajax({
+                    url:"${APP_PATH}/user/" + $(this).attr("del_id"),
+                    type: "DELETE",
+                    success:function(data){
+                        //如果删除成功返回当前页面
+                        get_emps($("#page_msg").attr("curr_page"));
+                    }
+                });
+            }
         });
 
     </script>

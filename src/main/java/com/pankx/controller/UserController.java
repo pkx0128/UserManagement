@@ -103,4 +103,16 @@ public class UserController {
         return Msg.success();
     }
 
+    /**
+     * 根据id删除用户信息
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/user/{userId}",method = DELETE)
+    @ResponseBody
+    public Msg deluser(@PathVariable Integer userId){
+        userService.deleteuserbyid(userId);
+        return Msg.success();
+    }
+
 }

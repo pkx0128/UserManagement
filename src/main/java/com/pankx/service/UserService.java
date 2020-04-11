@@ -71,4 +71,13 @@ public class UserService {
     public int updateuser(User user){
         return userMapper.updateByPrimaryKeySelective(user);
     }
+
+    /**
+     * 根据id删除信息
+     * @param userId
+     * @return
+     */
+    public int deleteuserbyid(Integer userId){
+       return  userMapper.deleteByPrimaryKey(userId);
+    }
 }
