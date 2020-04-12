@@ -529,11 +529,12 @@
                         success:function(date){
                             //返回当前页
                             get_emps($("#page_msg").attr("curr_page"));
+                            //取消全选复选框选中
+                            $("#check_all").prop("checked",false);
                         }
                     });
                 }
             }
-
         });
 
     </script>
