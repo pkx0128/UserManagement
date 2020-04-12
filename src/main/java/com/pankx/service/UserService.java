@@ -80,4 +80,15 @@ public class UserService {
     public int deleteuserbyid(Integer userId){
        return  userMapper.deleteByPrimaryKey(userId);
     }
+
+    /**
+     * 根据id批量删除
+     * @param userIds
+     * @return
+     */
+    public int delselecteuser(List<Integer> userIds){
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andUserIdIn(userIds);
+        return userMapper.deleteByExample(userExample);
+    }
 }

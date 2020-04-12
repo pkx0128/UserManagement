@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
@@ -115,4 +116,24 @@ public class UserController {
         return Msg.success();
     }
 
+    /**
+     * 根据id批量删除用户信息
+     * @param userIds
+     * @return
+     */
+    @RequestMapping(value = "/delselectuser/{userIds}",method = DELETE)
+    @ResponseBody
+    public Msg delusers(@PathVariable String userIds){
+        List<Integer> list = new ArrayList<Integer>();
+        //截取用户id
+        String[] users =  userIds.split("、");
+        //遍历截取后的用户id
+        for(String user:users){
+            //把截取后的id转换成Integer类型并添加到List中
+            list.add(Integer.parseInt(user));
+        }
+        //调用业务层的批量删除方法删除数据
+         userService.delselecteuser(list);
+        return Msg.success();
+    }
 }

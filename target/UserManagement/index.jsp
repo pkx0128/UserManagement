@@ -146,6 +146,7 @@
             <div class="col-sm-12">
                 <table class="table table-hover" id="user_table">
                     <thead>
+                        <th><input type="checkbox" id="check_all"></th>
                         <th>用户ID</th>
                         <th>用户名</th>
                         <th>姓别</th>
@@ -196,6 +197,8 @@
             console.log(users);
             //遍历返回的数据并解析显示到table
             $.each(users,function(index,item){
+                //添加复选框
+                var checkboxTD = $("<td></td>").append($("<input type='checkbox' class='check_user'/>").attr("del_userId",item.userId).attr("del_username",item.userName));
                 //用户id单元格
                 var useridTd = $("<td></td>").append(item.userId);
                 //用户名单元格
@@ -211,7 +214,7 @@
                 //删除按钮
                 var del_btn = $("<button></button>").attr("id","del_btn").attr("del_id",item.userId).addClass("btn btn-danger btn-sm").append("<span></span>").addClass("glyphicon glyphicon-trash").append("删除");
                 var btnTd = $("<td></td>").append(edit_btn).append(" ").append(del_btn);
-                $("<tr></tr>").append(useridTd).append(userNameTd).append(genderTd).append(emailTd).append(uTypeTd).append(btnTd).appendTo($("#user_table tbody"));
+                $("<tr></tr>").append(checkboxTD).append(useridTd).append(userNameTd).append(genderTd).append(emailTd).append(uTypeTd).append(btnTd).appendTo($("#user_table tbody"));
             });
         }
         //处理分页信息
@@ -496,6 +499,41 @@
                     }
                 });
             }
+        });
+
+        //实现全选与全不选功能
+        $("#check_all").click(function(){
+            $(".check_user").prop("checked",$("#check_all").prop("checked"));
+        });
+        //当前分布所有用户信息被选中，全选按钮也要被选中
+        $(document).on("click",".check_user",function(){
+            $("#check_all").prop("checked",$(".check_user:checked").length == $(".check_user").length);
+        });
+
+        //点击右上角删除按钮删除选定的用户信息
+        $("#del_user_btn").click(function(){
+            var deluserId = "";
+            //遍历选中的复选框并存入变量deluserId
+            $.each($(".check_user:checked"),function(index,item){
+                deluserId += $(this).attr("del_userId")+"、";
+            });
+            //通过截取去掉最后多余的 - 号
+            deluserId = deluserId.substring(0,deluserId.length - 1);
+            console.log(deluserId);
+            if(deluserId.length > 0){
+                if(confirm("你确实要删除id为"+deluserId+"这些用户的信息吗？")){
+                    //发送删除请求到服务器处理
+                    $.ajax({
+                        url:"${APP_PATH}/delselectuser/" + deluserId,
+                        type:"DELETE",
+                        success:function(date){
+                            //返回当前页
+                            get_emps($("#page_msg").attr("curr_page"));
+                        }
+                    });
+                }
+            }
+
         });
 
     </script>
